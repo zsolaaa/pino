@@ -1,0 +1,2607 @@
+<!doctype html>
+<html lang="hu" data-mode="minimal">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pinocchio Pizzéria · Baja</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
+  <style>
+/* ────────────────────────────────────────────────────────────────
+   Pinocchio Pizzéria — letisztult minimál
+   Color modes via [data-mode] on <html>
+───────────────────────────────────────────────────────────────── */
+
+:root {
+  --bg: #f7f3ea;
+  --bg-2: #ffffff;
+  --fg: #1a1815;
+  --fg-soft: #4a463f;
+  --fg-mute: #8a857c;
+  --line: #d9d1bf;
+  --line-soft: #ece4d3;
+  --accent: #c8362a;     /* tomato */
+  --accent-ink: #ffffff;
+
+  --display: "DM Serif Display", "Cormorant Garamond", Georgia, serif;
+  --body: "Manrope", "Söhne", system-ui, -apple-system, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --maxw: 1280px;
+  --gutter: clamp(20px, 4vw, 56px);
+}
+
+html[data-mode="editorial"] {
+  --bg: #efe7d4;
+  --bg-2: #f7f0dd;
+  --fg: #1a1815;
+  --fg-soft: #3b362c;
+  --fg-mute: #756f60;
+  --line: #c9bd9e;
+  --line-soft: #d7cdb1;
+}
+
+html[data-mode="bold"] {
+  --bg: #16140f;
+  --bg-2: #1f1c16;
+  --fg: #f5efe4;
+  --fg-soft: #ddd5c4;
+  --fg-mute: #9c9685;
+  --line: #2e2a22;
+  --line-soft: #25221c;
+}
+
+/* Reset */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { background: var(--bg); color: var(--fg); }
+body {
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+img, svg { display: block; max-width: 100%; }
+button { font: inherit; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4 { margin: 0; font-weight: 400; }
+p { margin: 0; }
+
+/* ── Type ───────────────────────────────────────────────────── */
+.display { font-family: var(--display); font-weight: 400; line-height: 1.02; letter-spacing: -0.01em; }
+.serif { font-family: var(--display); }
+.mono { font-family: var(--mono); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; }
+.eyebrow {
+  font-family: var(--body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--fg-mute);
+}
+
+/* ── Layout ─────────────────────────────────────────────────── */
+.container {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+.app {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+/* ── Nav ────────────────────────────────────────────────────── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in oklab, var(--bg) 88%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border-bottom: 1px solid var(--line-soft);
+}
+.nav-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: 76px;
+  gap: 24px;
+}
+.nav-brand {
+  font-family: var(--display);
+  font-size: 26px;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-brand .flag {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 22px;
+  height: 14px;
+  overflow: hidden;
+  border-radius: 2px;
+  border: 1px solid var(--line);
+}
+.nav-brand .flag span:nth-child(1){ background:#0a7a3a;}
+.nav-brand .flag span:nth-child(2){ background: var(--bg-2);}
+.nav-brand .flag span:nth-child(3){ background: var(--accent);}
+
+.nav-links {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+.nav-link {
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  color: var(--fg-soft);
+  transition: color .15s ease, background .15s ease;
+}
+.nav-link:hover { color: var(--fg); }
+.nav-link.active {
+  color: var(--fg);
+  background: color-mix(in oklab, var(--fg) 8%, transparent);
+}
+html[data-mode="bold"] .nav-link.active { background: color-mix(in oklab, var(--fg) 14%, transparent); }
+
+.nav-phone {
+  justify-self: end;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .04em;
+  color: var(--fg-soft);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav-phone .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #2aa754;
+  box-shadow: 0 0 0 3px color-mix(in oklab, #2aa754 25%, transparent);
+}
+
+/* ── EU / Széchenyi Terv Plusz funding badge ───────────────── */
+.funding-badge {
+  position: fixed;
+  top: 92px;
+  left: 16px;
+  z-index: 60;
+  display: block;
+  width: clamp(180px, 18vw, 240px);
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 6px;
+  padding: 8px 10px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.18), 0 1px 0 rgba(0,0,0,.05);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.funding-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 32px rgba(0,0,0,.22), 0 1px 0 rgba(0,0,0,.05);
+}
+.funding-badge img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+@media (max-width: 880px) {
+  .funding-badge {
+    top: auto;
+    bottom: 12px;
+    left: 12px;
+    width: 150px;
+    padding: 6px 8px;
+  }
+}
+
+/* ── Hero ───────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: clamp(560px, 78vh, 820px);
+  display: grid;
+  align-items: end;
+  overflow: hidden;
+}
+
+/* Photo hero — image-led, the image carries its own brand title */
+.hero-photo {
+  min-height: clamp(640px, 92vh, 940px);
+  background: #1a1410;
+}
+.hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+  z-index: 1;
+}
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,.2) 35%, rgba(0,0,0,.0) 55%, rgba(0,0,0,.65) 100%),
+    linear-gradient(90deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,0) 50%);
+  pointer-events: none;
+}
+.hero-photo .hero-content { z-index: 3; }
+.hero-cta-bar {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  padding: 0 0 clamp(28px, 4vw, 48px);
+}
+.hero-cta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.hero-eyebrow-mini {
+  color: rgba(255,255,255,.88);
+  font-family: var(--body);
+  font-size: 12.5px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(0,0,0,.35);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.12);
+}
+.hero-eyebrow-mini .bar {
+  width: 22px; height: 1px; background: rgba(255,255,255,.7);
+  display: inline-block;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #2a261d 0%, #4a4034 60%, #6a5c4a 100%);
+  overflow: hidden;
+}
+.hero-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse at 30% 40%, rgba(200, 54, 42, 0.35) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 60%, rgba(255, 200, 100, 0.25) 0%, transparent 55%),
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.06) 0 2px, transparent 2px 7px);
+}
+.hero-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.2) 0%, rgba(0,0,0,.0) 30%, rgba(0,0,0,.55) 100%);
+}
+.hero-placeholder-label {
+  position: absolute;
+  left: 24px;
+  top: 24px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.55);
+  background: rgba(0,0,0,.25);
+  padding: 6px 10px;
+  border-radius: 4px;
+  z-index: 2;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 0 var(--gutter) clamp(48px, 8vh, 96px);
+  color: #fff;
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+.hero-eyebrow {
+  font-family: var(--body);
+  font-size: 11px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.78);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.hero-eyebrow .bar {
+  display: inline-block;
+  width: 38px;
+  height: 1px;
+  background: rgba(255,255,255,.6);
+}
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(56px, 9vw, 132px);
+  line-height: .92;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+  max-width: 14ch;
+}
+.hero-title em {
+  font-style: italic;
+  color: color-mix(in oklab, #fff 70%, var(--accent));
+}
+.hero-sub {
+  max-width: 46ch;
+  font-size: clamp(16px, 1.4vw, 19px);
+  color: rgba(255,255,255,.86);
+  line-height: 1.5;
+  margin-bottom: 36px;
+}
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ── Buttons ────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 22px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: .02em;
+  transition: transform .15s ease, background .15s ease, color .15s ease, border-color .15s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover { background: color-mix(in oklab, var(--accent) 88%, #000); }
+.btn-ghost-light { background: transparent; color: #fff; border-color: rgba(255,255,255,.4); }
+.btn-ghost-light:hover { background: rgba(255,255,255,.1); }
+.btn-ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+.btn-ghost:hover { border-color: var(--fg); }
+.btn-dark { background: var(--fg); color: var(--bg); }
+.btn-dark:hover { background: color-mix(in oklab, var(--fg) 90%, var(--accent)); }
+
+/* ── Sections ───────────────────────────────────────────────── */
+.section { padding: clamp(64px, 10vw, 128px) 0; }
+.section-tight { padding: clamp(40px, 6vw, 80px) 0; }
+.section-title {
+  font-family: var(--display);
+  font-size: clamp(40px, 5vw, 72px);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  max-width: 18ch;
+}
+.section-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 32px;
+  margin-bottom: 56px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 28px;
+}
+.section-head .eyebrow { margin-bottom: 14px; }
+
+/* ── Hours strip ────────────────────────────────────────────── */
+.hours-strip {
+  background: var(--bg-2);
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+html[data-mode="bold"] .hours-strip { background: var(--bg-2); }
+.hours-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 36px;
+  padding: 28px 0;
+}
+.hours-days {
+  display: flex;
+  gap: clamp(16px, 3vw, 38px);
+  flex-wrap: wrap;
+}
+.hours-day {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .1em;
+  color: var(--fg-mute);
+}
+.hours-day b {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 22px;
+  letter-spacing: 0;
+  color: var(--fg);
+  text-transform: none;
+}
+.hours-day.today b { color: var(--accent); }
+.hours-status {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--fg-mute);
+  letter-spacing: .12em;
+}
+.hours-status .live {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #2aa754;
+  font-weight: 600;
+}
+.hours-status .live::before {
+  content: "";
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #2aa754;
+  box-shadow: 0 0 0 3px color-mix(in oklab, #2aa754 25%, transparent);
+}
+
+/* ── Featured pizzas ────────────────────────────────────────── */
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(20px, 2vw, 36px);
+}
+.feat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.feat-img {
+  aspect-ratio: 4 / 5;
+  background: var(--bg-2);
+  border: 1px solid var(--line-soft);
+  position: relative;
+  overflow: hidden;
+}
+.feat-img .label {
+  position: absolute;
+  left: 14px; top: 14px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .16em;
+  color: var(--fg-mute);
+  background: var(--bg);
+  padding: 4px 8px;
+  border-radius: 2px;
+  z-index: 2;
+}
+.feat-img .num {
+  position: absolute;
+  right: 18px;
+  bottom: 14px;
+  font-family: var(--display);
+  font-size: 64px;
+  color: color-mix(in oklab, var(--fg) 14%, transparent);
+  line-height: 1;
+  z-index: 2;
+}
+.feat-img-stripe {
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(45deg,
+    color-mix(in oklab, var(--fg) 4%, transparent) 0 1px,
+    transparent 1px 11px);
+}
+.feat-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--line-soft);
+  padding-bottom: 12px;
+}
+.feat-name {
+  font-family: var(--display);
+  font-size: 26px;
+  line-height: 1;
+}
+.feat-price {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--fg-soft);
+}
+.feat-desc {
+  color: var(--fg-mute);
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+
+/* ── Two-col promo ──────────────────────────────────────────── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(40px, 6vw, 96px);
+  align-items: center;
+}
+.two-col-img {
+  aspect-ratio: 4 / 5;
+  background: var(--bg-2);
+  border: 1px solid var(--line-soft);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Reviews ────────────────────────────────────────────────── */
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+.review {
+  border: 1px solid var(--line-soft);
+  padding: 32px 28px;
+  background: var(--bg-2);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-radius: 4px;
+}
+.review-stars {
+  color: var(--accent);
+  letter-spacing: 3px;
+  font-size: 16px;
+}
+.review-quote {
+  font-family: var(--display);
+  font-size: 22px;
+  line-height: 1.25;
+  color: var(--fg);
+}
+.review-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+}
+.review-avatar {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: color-mix(in oklab, var(--accent) 18%, var(--bg-2));
+  display: grid; place-items: center;
+  font-family: var(--display);
+  font-size: 16px;
+  color: var(--accent);
+}
+.review-meta b { font-weight: 600; font-size: 14px; }
+.review-meta span { font-size: 12px; color: var(--fg-mute); }
+
+/* ── Menu page ──────────────────────────────────────────────── */
+.menu-header {
+  padding-top: clamp(72px, 10vw, 128px);
+  padding-bottom: clamp(48px, 6vw, 80px);
+  border-bottom: 1px solid var(--line);
+}
+.menu-title {
+  font-family: var(--display);
+  font-size: clamp(72px, 10vw, 180px);
+  line-height: .9;
+  letter-spacing: -0.025em;
+  margin-bottom: 24px;
+}
+.menu-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: end;
+}
+.menu-controls {
+  display: flex;
+  gap: 12px;
+  margin-top: 36px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.menu-search {
+  flex: 1;
+  min-width: 240px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg-2);
+}
+.menu-search input {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  font-size: 14px;
+}
+.menu-search input::placeholder { color: var(--fg-mute); }
+.menu-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 16px 0 24px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.menu-tab {
+  background: transparent;
+  border: 1px solid var(--line);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  color: var(--fg-soft);
+}
+.menu-tab.active {
+  background: var(--fg);
+  color: var(--bg);
+  border-color: var(--fg);
+}
+
+.menu-section { padding: clamp(48px, 6vw, 88px) 0; border-bottom: 1px solid var(--line-soft); }
+.menu-section:last-of-type { border-bottom: 0; }
+.menu-section-head {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 48px;
+  margin-bottom: 40px;
+  align-items: start;
+}
+.menu-section-title {
+  font-family: var(--display);
+  font-size: 44px;
+  line-height: 1;
+  letter-spacing: -.01em;
+}
+.menu-section-note {
+  font-size: 14px;
+  color: var(--fg-mute);
+  max-width: 60ch;
+  line-height: 1.6;
+}
+
+.menu-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 64px;
+}
+@media (max-width: 880px) { .menu-list { grid-template-columns: 1fr; } }
+
+.menu-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 14px;
+  padding: 18px 0;
+  border-bottom: 1px dashed var(--line-soft);
+  align-items: baseline;
+}
+.menu-item-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--fg-mute);
+  min-width: 22px;
+}
+.menu-item-body { display: flex; flex-direction: column; gap: 4px; }
+.menu-item-name {
+  font-family: var(--display);
+  font-size: 20px;
+  letter-spacing: -.005em;
+}
+.menu-item-desc {
+  font-size: 13.5px;
+  color: var(--fg-mute);
+  line-height: 1.45;
+}
+.menu-item-price {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--fg);
+  white-space: nowrap;
+}
+.menu-empty {
+  padding: 80px 0;
+  text-align: center;
+  color: var(--fg-mute);
+  font-size: 14px;
+}
+
+.menu-foot {
+  padding: 40px 0 0;
+  font-size: 12.5px;
+  color: var(--fg-mute);
+  line-height: 1.7;
+  border-top: 1px solid var(--line-soft);
+  margin-top: 24px;
+}
+
+/* ── Gallery ────────────────────────────────────────────────── */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-auto-rows: 120px;
+  gap: 14px;
+}
+.tile {
+  background: var(--bg-2);
+  border: 1px solid var(--line-soft);
+  position: relative;
+  overflow: hidden;
+  transition: transform .25s ease;
+}
+.tile:hover { transform: scale(1.01); }
+.tile .label {
+  position: absolute;
+  left: 14px; top: 14px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: .14em;
+  color: var(--fg-mute);
+  z-index: 2;
+}
+.tile .caption {
+  position: absolute;
+  left: 16px; right: 16px; bottom: 14px;
+  font-family: var(--display);
+  font-size: 18px;
+  color: var(--fg);
+  z-index: 2;
+}
+.tile-stripe {
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(45deg,
+    color-mix(in oklab, var(--fg) 4%, transparent) 0 1px,
+    transparent 1px 11px);
+}
+.tile-warm  { background: linear-gradient(160deg, #d4a273 0%, #a06a3a 100%); }
+.tile-dark  { background: linear-gradient(160deg, #2a261d 0%, #4a4034 100%); }
+.tile-red   { background: linear-gradient(160deg, #d8493b 0%, #8c2117 100%); }
+.tile-cream { background: linear-gradient(160deg, #f3eadb 0%, #d9cdb0 100%); }
+.tile-warm .label, .tile-warm .caption,
+.tile-dark .label, .tile-dark .caption,
+.tile-red  .label, .tile-red  .caption { color: rgba(255,255,255,.92); }
+
+/* sizes */
+.s-2x2 { grid-column: span 2; grid-row: span 2; }
+.s-2x1 { grid-column: span 2; grid-row: span 1; }
+.s-3x2 { grid-column: span 3; grid-row: span 2; }
+.s-1x2 { grid-column: span 1; grid-row: span 2; }
+.s-3x1 { grid-column: span 3; grid-row: span 1; }
+.s-4x2 { grid-column: span 4; grid-row: span 2; }
+
+/* ── About ──────────────────────────────────────────────────── */
+.about-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: end;
+  padding-top: clamp(64px, 8vw, 120px);
+  padding-bottom: clamp(40px, 6vw, 80px);
+}
+.about-hero h1 {
+  font-family: var(--display);
+  font-size: clamp(64px, 9vw, 156px);
+  line-height: .9;
+  letter-spacing: -.025em;
+}
+.about-hero p {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(20px, 2vw, 28px);
+  line-height: 1.3;
+  color: var(--fg-soft);
+  max-width: 30ch;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: clamp(40px, 6vw, 96px);
+  padding-top: clamp(40px, 6vw, 80px);
+  padding-bottom: clamp(40px, 6vw, 80px);
+  align-items: start;
+}
+.about-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  font-size: 16.5px;
+  color: var(--fg-soft);
+  line-height: 1.65;
+}
+.about-stack h3 {
+  font-family: var(--display);
+  font-size: 28px;
+  color: var(--fg);
+  line-height: 1.1;
+  margin-bottom: -6px;
+}
+.about-img {
+  aspect-ratio: 3 / 4;
+  background: var(--bg-2);
+  border: 1px solid var(--line-soft);
+  position: relative;
+  overflow: hidden;
+  position: sticky;
+  top: 96px;
+}
+
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 36px;
+  padding: clamp(40px, 6vw, 80px) 0;
+  border-top: 1px solid var(--line);
+}
+.pillar { display: flex; flex-direction: column; gap: 10px; }
+.pillar .num {
+  font-family: var(--display);
+  font-size: 56px;
+  line-height: 1;
+  color: var(--accent);
+}
+.pillar h4 {
+  font-family: var(--display);
+  font-size: 24px;
+}
+.pillar p { color: var(--fg-mute); font-size: 14.5px; line-height: 1.55; }
+
+/* ── Contact ────────────────────────────────────────────────── */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: clamp(40px, 6vw, 96px);
+  padding: clamp(64px, 8vw, 128px) 0 clamp(40px, 6vw, 80px);
+}
+.contact-info { display: flex; flex-direction: column; gap: 36px; }
+.contact-block {
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+.contact-block .eyebrow { margin-bottom: 6px; }
+.contact-block .val {
+  font-family: var(--display);
+  font-size: 26px;
+  line-height: 1.15;
+}
+.contact-block a:hover { color: var(--accent); }
+
+.form { display: flex; flex-direction: column; gap: 18px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .16em;
+  color: var(--fg-mute);
+}
+.field input, .field textarea, .field select {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 0;
+  padding: 14px 14px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--fg);
+  outline: none;
+  transition: border .15s ease;
+}
+.field input:focus, .field textarea:focus, .field select:focus { border-color: var(--fg); }
+.field textarea { resize: vertical; min-height: 120px; }
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.form-note { font-size: 12px; color: var(--fg-mute); }
+
+.map {
+  margin-top: 32px;
+  height: 360px;
+  background: var(--bg-2);
+  border: 1px solid var(--line-soft);
+  position: relative;
+  overflow: hidden;
+}
+.map-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(var(--line-soft) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: .7;
+}
+.map-river {
+  position: absolute;
+  left: -10%;
+  top: 30%;
+  width: 130%;
+  height: 80px;
+  background: color-mix(in oklab, var(--accent) 8%, var(--bg-2));
+  transform: rotate(-7deg);
+  border-top: 1px solid color-mix(in oklab, var(--accent) 30%, var(--line));
+  border-bottom: 1px solid color-mix(in oklab, var(--accent) 30%, var(--line));
+}
+.map-pin {
+  position: absolute;
+  left: 50%; top: 52%;
+  transform: translate(-50%, -100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+}
+.map-pin .pin {
+  width: 18px; height: 18px; border-radius: 50% 50% 50% 0;
+  background: var(--accent);
+  transform: rotate(-45deg);
+  box-shadow: 0 4px 12px rgba(0,0,0,.2);
+}
+.map-pin .pin::after {
+  content: ""; position: absolute;
+  left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 6px; height: 6px; border-radius: 50%; background: var(--bg-2);
+}
+.map-pin .lbl {
+  margin-top: 14px;
+  font-family: var(--mono);
+  font-size: 11px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  padding: 5px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* ── Footer ─────────────────────────────────────────────────── */
+.footer {
+  background: var(--bg-2);
+  border-top: 1px solid var(--line);
+  padding: 64px 0 28px;
+  margin-top: 64px;
+}
+html[data-mode="bold"] .footer { background: #0e0c08; }
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.footer h5 {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .16em;
+  color: var(--fg-mute);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.footer ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
+.footer li a:hover { color: var(--accent); }
+.footer-tagline {
+  font-family: var(--display);
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -.01em;
+  margin-top: 14px;
+  max-width: 14ch;
+}
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 24px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--fg-mute);
+  letter-spacing: .06em;
+}
+
+/* ── Page transitions ───────────────────────────────────────── */
+.page { animation: fadeIn .35s ease; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 980px) {
+  .nav-row { grid-template-columns: auto 1fr auto; }
+  .nav-links { display: none; }
+  .featured-grid { grid-template-columns: 1fr 1fr; }
+  .reviews-grid { grid-template-columns: 1fr; }
+  .two-col { grid-template-columns: 1fr; }
+  .about-hero, .about-grid, .contact-grid, .menu-intro, .menu-section-head { grid-template-columns: 1fr; gap: 24px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .gallery-grid { grid-template-columns: repeat(4, 1fr); }
+  .pillars { grid-template-columns: 1fr; }
+  .hours-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .featured-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr; }
+}
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+  <script>
+/* eslint-disable */
+// Menu data extracted from the Pinocchio menu PDF.
+
+window.MENU_DATA = {
+  PIZZA: {
+    label: "Pizza",
+    note: "Kemencében sült, kézzel nyújtott tészta. Kérésre csomagolás 200 Ft, extra pizzaszósz 300 Ft, csípős pizzaszósz 300 Ft.",
+    items: [
+      { n:1,  name:"Margherita",                  price:"2690 Ft", desc:"Paradicsomszósz, mozzarella" },
+      { n:2,  name:"Salame",                      price:"3090 Ft", desc:"Paradicsomszósz, mozzarella, olasz (dolce) szalámi" },
+      { n:3,  name:"Salame Piccante",             price:"3090 Ft", desc:"Paradicsomszósz, mozzarella, olasz csípős szalámi" },
+      { n:4,  name:"Funghi",                      price:"2790 Ft", desc:"Paradicsomszósz, mozzarella, gomba" },
+      { n:5,  name:"Pinocchio",                   price:"3590 Ft", desc:"Paradicsomszósz, mozzarella, rukkola, pármai sonka, parmezán forgács", featured:true },
+      { n:6,  name:"Amore",                       price:"3590 Ft", desc:"Paradicsomszósz, mozzarella, rukkola, pármai sonka, koktélparadicsom" },
+      { n:7,  name:"Ungherese",                   price:"3590 Ft", desc:"Paradicsomszósz, mozzarella, lilahagyma, olasz csípős szalámi, bacon, csípős pepperoni", spicy:true },
+      { n:8,  name:"Salame Piccante e Gorgonzola",price:"3290 Ft", desc:"Paradicsomszósz, mozzarella, olasz csípős szalámi, gorgonzola sajt", spicy:true },
+      { n:9,  name:"Tonno e Cipolla",             price:"3290 Ft", desc:"Paradicsomszósz, mozzarella, lilahagyma, tonhal, olívaolaj" },
+      { n:10, name:"4 Formaggi",                  price:"3290 Ft", desc:"Paradicsomszósz, mozzarella, parmezán, pecorino, gorgonzola" },
+      { n:11, name:"Cotto",                       price:"3190 Ft", desc:"Paradicsomszósz, mozzarella, olasz főtt sonka" },
+      { n:12, name:"Cotto e Funghi",              price:"3290 Ft", desc:"Paradicsomszósz, mozzarella, olasz főtt sonka, gomba" },
+      { n:13, name:"Prosciutto di Parma",         price:"3290 Ft", desc:"Paradicsomszósz, mozzarella, pármai sonka" },
+      { n:14, name:"Valmar",                      price:"3590 Ft", desc:"Paradicsomszósz, négysajtos alap, olasz csípős szalámi", spicy:true },
+      { n:15, name:"Bruno",                       price:"3590 Ft", desc:"Paradicsomszósz, négysajtos alap, olasz főtt sonka" },
+      { n:16, name:"Doppio",                      price:"3590 Ft", desc:"Paradicsomszósz, mozzarella, olasz csípős szalámi, főtt sonka, fokhagymás olívaolaj", spicy:true },
+      { n:17, name:"Diavola Verde",               price:"3590 Ft", desc:"Paradicsomszósz, mozzarella, olasz csípős szalámi, rukkola, koktélparadicsom", spicy:true, featured:true },
+      { n:18, name:"Vega",                        price:"3490 Ft", desc:"Paradicsomszósz, mozzarella, friss zöldségek és aromák" },
+      { n:19, name:"Capricciosa",                 price:"3590 Ft", desc:"Paradicsomszósz, mozzarella, articsóka, főtt sonka, fekete olivabogyó" },
+      { n:20, name:"Tartufo e N'Duja",            price:"3890 Ft", desc:"Tejszínes szarvasgombakrém, mozzarella, gomba, olasz csípős kolbászkrém (N'duja)", spicy:true, featured:true },
+    ]
+  },
+  PASTA: {
+    label: "Pasta",
+    note: "Igény szerint cserélhető tészta: tagliatelle, spagetti, gnocchi, penne.",
+    items: [
+      { n:1, name:"Arrabbiata",          price:"2990 Ft", desc:"Paradicsomszósz, fokhagymás olívaolaj, chili, koktélparadicsom, parmezán, spagetti", spicy:true },
+      { n:2, name:"Pomodoro",            price:"2890 Ft", desc:"Paradicsomszósz, fokhagymás olívaolaj, koktélparadicsom, parmezán, spagetti" },
+      { n:3, name:"Carbonara",           price:"3390 Ft", desc:"Tojássárgája, parmezán, guanciale (olasz tokaszalonna), feketebors, spagetti — kérésre tejszínes változatban is" },
+      { n:4, name:"Bolognai",            price:"3390 Ft", desc:"Paradicsomszósz, tradicionális bolognai ragu, parmezán, tagliatelle" },
+      { n:5, name:"Pasta al Tartufo",    price:"3690 Ft", desc:"Szarvasgomba, tejszín, fokhagymás olívaolaj, shiitake gomba, parmezán, tagliatelle" },
+      { n:6, name:"Pasta con Zucchine",  price:"3190 Ft", desc:"Grillezett cukkini, fokhagymás olívaolaj, parmezán, tagliatelle" },
+      { n:7, name:"Gnocchi al Formaggi", price:"3190 Ft", desc:"Tejszínes gnocchi, parmezán, gorgonzola" },
+      { n:8, name:"Gnocchi e Funghi",    price:"3190 Ft", desc:"Tejszínes gnocchi, gomba, fokhagymás olívaolaj, feketebors" },
+      { n:9, name:"Pi'Gnocchio",         price:"2990 Ft", desc:"Paradicsomszósz, fehérbor, fokhagymás olívaolaj, parmezán, rukkola" },
+      { n:10, name:"Pasta al Pesto",     price:"3190 Ft", desc:"Pesto, fokhagymás olívaolaj, koktélparadicsom, parmezán, spagetti" },
+      { n:11, name:"Aglio e Vegetable",  price:"3990 Ft", desc:"Fokhagymás olívaolaj, grillezett cukkini, koktélparadicsom, fekete olivabogyó, rukkola, spagetti" },
+    ]
+  },
+  SALATA: {
+    label: "Saláta",
+    note: "Salátáink mellé focaccia (pizzakenyér) jár.",
+    items: [
+      { n:1, name:"Vegetariana",     price:"2890 Ft", desc:"Jégsaláta, rukkola, fekete olivabogyó, mozzarella, parmezán, olívaolaj, balzsamkrém, koktélparadicsom, focaccia" },
+      { n:2, name:"Tonno e Olive",   price:"2990 Ft", desc:"Vegetáriánus salátaalap, tonhal, fokhagymás olívaolaj, focaccia" },
+      { n:3, name:"Parma e Pomodori",price:"2990 Ft", desc:"Vegetáriánus salátaalap, pármai sonka, focaccia" },
+    ]
+  },
+  EXTRA: {
+    label: "Extra feltétek",
+    note: "Tetszőlegesen bővítheted a pizzádat — sajtok, húsok, zöldségek.",
+    items: [
+      { n:1,  name:"Mozzarella (Fior di Latte)",            price:"350 Ft", desc:"Sajt" },
+      { n:2,  name:"Parmezán forgács",                       price:"450 Ft", desc:"Sajt" },
+      { n:3,  name:"Gorgonzola",                             price:"350 Ft", desc:"Sajt" },
+      { n:4,  name:"Salame (dolce szalámi)",                price:"400 Ft", desc:"Hús" },
+      { n:5,  name:"Salame Piccante (csípős szalámi)",      price:"400 Ft", desc:"Hús", spicy:true },
+      { n:6,  name:"Cotto (főtt sonka)",                    price:"400 Ft", desc:"Hús" },
+      { n:7,  name:"Prosciutto di Parma (pármai sonka)",    price:"600 Ft", desc:"Hús" },
+      { n:8,  name:"Pancetta (bacon)",                       price:"400 Ft", desc:"Hús" },
+      { n:9,  name:"Tonno (tonhal)",                         price:"450 Ft", desc:"Hús" },
+      { n:10, name:"Lilahagyma",                              price:"250 Ft", desc:"Zöldség" },
+      { n:11, name:"Kukorica",                                price:"250 Ft", desc:"Zöldség" },
+      { n:12, name:"Rukkola",                                 price:"350 Ft", desc:"Zöldség" },
+      { n:13, name:"Fekete olivabogyó",                      price:"250 Ft", desc:"Zöldség" },
+      { n:14, name:"Koktélparadicsom",                       price:"350 Ft", desc:"Zöldség" },
+      { n:15, name:"Pepperoni (csípős)",                     price:"300 Ft", desc:"Zöldség", spicy:true },
+      { n:16, name:"Gomba",                                   price:"300 Ft", desc:"Zöldség" },
+    ]
+  },
+  ITAL: {
+    label: "Italok",
+    note: "Csapolt Birra Moretti, válogatott söröket és pálinkákat kínálunk.",
+    items: [
+      { n:1, name:"Birra Moretti csapolt (pohár / korsó)", price:"800 / 1200 Ft", desc:"Olasz lager, frissen csapolva" },
+      { n:2, name:"Peroni",                                 price:"700 Ft",       desc:"0,33 l üveges" },
+      { n:3, name:"Heineken",                               price:"800 Ft",       desc:"0,33 l üveges" },
+      { n:4, name:"Heineken 0.0%",                          price:"800 Ft",       desc:"0,33 l alkoholmentes" },
+      { n:5, name:"Gösser Citrom 2%",                       price:"700 Ft",       desc:"dobozos" },
+      { n:6, name:"Gösser Citrom 0.0%",                     price:"700 Ft",       desc:"dobozos, alkoholmentes" },
+      { n:7, name:"Jäger (2 cl / 4 cl)",                    price:"660 / 1100 Ft",desc:"Likőr" },
+      { n:8, name:"Unicum (2 cl / 4 cl)",                   price:"660 / 1100 Ft",desc:"Magyar gyomorkeserű" },
+      { n:9, name:"Pálinka (2 cl / 4 cl)",                  price:"750 / 1500 Ft",desc:"Válogatott pálinkáink — érdeklődj a pultnál" },
+    ]
+  },
+  KAVE: {
+    label: "Üdítők & kávé",
+    note: "Olasz pörkölésű kávé, üdítők és teák.",
+    items: [
+      { n:1, name:"Espresso",        price:"600 Ft", desc:"Klasszikus olasz módra" },
+      { n:2, name:"Hosszú kávé",     price:"600 Ft", desc:"Lungo" },
+      { n:3, name:"Cappuccino",      price:"700 Ft", desc:"Selymes tejhabbal" },
+      { n:4, name:"Latte",           price:"900 Ft", desc:"Tejes kávé, nagy pohárban" },
+      { n:5, name:"Melange",         price:"1000 Ft", desc:"Kávé tejszínhabbal" },
+      { n:6, name:"Üdítők 0,33 l",   price:"700 Ft", desc:"Coca Cola, Cola Zero, Fanta, Sprite" },
+      { n:7, name:"Cappy Juice 0,25 l", price:"700 Ft", desc:"Alma, eper, körte, őszibarack, narancs" },
+      { n:8, name:"Fuzetea 0,25 l",  price:"700 Ft", desc:"Citrom, őszibarack" },
+      { n:9, name:"Lemonsoda 0,33 l",price:"700 Ft", desc:"Lemon, Mojito, Orán, Zero" },
+      { n:10, name:"Natur Aqua 0,33 l", price:"400 Ft", desc:"Szénsavas vagy szénsavmentes" },
+    ]
+  },
+  DESSZERT: {
+    label: "Desszertek",
+    note: "Napi desszert kínálatunkról a pultnál érdeklődj!",
+    items: [
+      { n:1, name:"Napi desszert", price:"700 Ft", desc:"Tiramisu / panna cotta / profiterol / epres süti — változó kínálat" },
+    ]
+  }
+};
+  </script>
+  <script type="text/babel">
+
+// tweaks-panel.jsx
+// Reusable Tweaks shell + form-control helpers.
+//
+// Owns the host protocol (listens for __activate_edit_mode / __deactivate_edit_mode,
+// posts __edit_mode_available / __edit_mode_set_keys / __edit_mode_dismissed) so
+// individual prototypes don't re-roll it. Ships a consistent set of controls so you
+// don't hand-draw <input type="range">, segmented radios, steppers, etc.
+//
+// Usage (in an HTML file that loads React + Babel):
+//
+//   const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+//     "primaryColor": "#D97757",
+//     "palette": ["#D97757", "#29261b", "#f6f4ef"],
+//     "fontSize": 16,
+//     "density": "regular",
+//     "dark": false
+//   }/*EDITMODE-END*/;
+//
+//   function App() {
+//     const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+//     return (
+//       <div style={{ fontSize: t.fontSize, color: t.primaryColor }}>
+//         Hello
+//         <TweaksPanel>
+//           <TweakSection label="Typography" />
+//           <TweakSlider label="Font size" value={t.fontSize} min={10} max={32} unit="px"
+//                        onChange={(v) => setTweak('fontSize', v)} />
+//           <TweakRadio  label="Density" value={t.density}
+//                        options={['compact', 'regular', 'comfy']}
+//                        onChange={(v) => setTweak('density', v)} />
+//           <TweakSection label="Theme" />
+//           <TweakColor  label="Primary" value={t.primaryColor}
+//                        options={['#D97757', '#2A6FDB', '#1F8A5B', '#7A5AE0']}
+//                        onChange={(v) => setTweak('primaryColor', v)} />
+//           <TweakColor  label="Palette" value={t.palette}
+//                        options={[['#D97757', '#29261b', '#f6f4ef'],
+//                                  ['#475569', '#0f172a', '#f1f5f9']]}
+//                        onChange={(v) => setTweak('palette', v)} />
+//           <TweakToggle label="Dark mode" value={t.dark}
+//                        onChange={(v) => setTweak('dark', v)} />
+//         </TweaksPanel>
+//       </div>
+//     );
+//   }
+//
+// ─────────────────────────────────────────────────────────────────────────────
+
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    transform:scale(var(--dc-inv-zoom,1));transform-origin:bottom right;
+    background:rgba(250,249,247,.78);color:#29261b;
+    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;
+    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
+  .twk-body::-webkit-scrollbar{width:8px}
+  .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
+  .twk-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:4px;
+    border:2px solid transparent;background-clip:content-box}
+  .twk-body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.25);
+    border:2px solid transparent;background-clip:content-box}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
+    color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+
+  .twk-field{appearance:none;box-sizing:border-box;width:100%;min-width:0;height:26px;padding:0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
+    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
+  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
+  select.twk-field{padding-right:22px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
+    background-repeat:no-repeat;background-position:right 8px center}
+
+  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
+    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
+  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
+    width:14px;height:14px;border-radius:50%;background:#fff;
+    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
+    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
+    background:rgba(0,0,0,.06);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg.dragging .twk-seg-thumb{transition:none}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+    background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
+    border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2;
+    overflow-wrap:anywhere}
+
+  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
+    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+
+  .twk-num{display:flex;align-items:center;box-sizing:border-box;min-width:0;height:26px;padding:0 0 0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;background:rgba(255,255,255,.6)}
+  .twk-num-lbl{font-weight:500;color:rgba(41,38,27,.6);cursor:ew-resize;
+    user-select:none;padding-right:8px}
+  .twk-num input{flex:1;min-width:0;height:100%;border:0;background:transparent;
+    font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px 0 0;
+    outline:none;color:inherit;-moz-appearance:textfield}
+  .twk-num input::-webkit-inner-spin-button,.twk-num input::-webkit-outer-spin-button{
+    -webkit-appearance:none;margin:0}
+  .twk-num-unit{padding-right:8px;color:rgba(41,38,27,.45)}
+
+  .twk-btn{appearance:none;height:26px;padding:0 12px;border:0;border-radius:7px;
+    background:rgba(0,0,0,.78);color:#fff;font:inherit;font-weight:500;cursor:default}
+  .twk-btn:hover{background:rgba(0,0,0,.88)}
+  .twk-btn.secondary{background:rgba(0,0,0,.06);color:inherit}
+  .twk-btn.secondary:hover{background:rgba(0,0,0,.1)}
+
+  .twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;
+    background:transparent;flex-shrink:0}
+  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
+  .twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
+  .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
+
+  .twk-chips{display:flex;gap:6px}
+  .twk-chip{position:relative;appearance:none;flex:1;min-width:0;height:46px;
+    padding:0;border:0;border-radius:6px;overflow:hidden;cursor:default;
+    box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.06);
+    transition:transform .12s cubic-bezier(.3,.7,.4,1),box-shadow .12s}
+  .twk-chip:hover{transform:translateY(-1px);
+    box-shadow:0 0 0 .5px rgba(0,0,0,.18),0 4px 10px rgba(0,0,0,.12)}
+  .twk-chip[data-on="1"]{box-shadow:0 0 0 1.5px rgba(0,0,0,.85),
+    0 2px 6px rgba(0,0,0,.15)}
+  .twk-chip>span{position:absolute;top:0;bottom:0;right:0;width:34%;
+    display:flex;flex-direction:column;box-shadow:-1px 0 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i{flex:1;box-shadow:0 -1px 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i:first-child{box-shadow:none}
+  .twk-chip svg{position:absolute;top:6px;left:6px;width:13px;height:13px;
+    filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+`;
+
+// ── useTweaks ───────────────────────────────────────────────────────────────
+// Single source of truth for tweak values. setTweak persists via the host
+// (__edit_mode_set_keys → host rewrites the EDITMODE block on disk).
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  // Accepts either setTweak('key', value) or setTweak({ key: value, ... }) so a
+  // useState-style call doesn't write a "[object Object]" key into the persisted
+  // JSON block.
+  const setTweak = React.useCallback((keyOrEdits, val) => {
+    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
+      ? keyOrEdits : { [keyOrEdits]: val };
+    setValues((prev) => ({ ...prev, ...edits }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+    // Same-window signal so in-page listeners (deck-stage rail thumbnails)
+    // can react — the parent message only reaches the host, not peers.
+    window.dispatchEvent(new CustomEvent('tweakchange', { detail: edits }));
+  }, []);
+  return [values, setTweak];
+}
+
+// ── TweaksPanel ─────────────────────────────────────────────────────────────
+// Floating shell. Registers the protocol listener BEFORE announcing
+// availability — if the announce ran first, the host's activate could land
+// before our handler exists and the toolbar toggle would silently no-op.
+// The close button posts __edit_mode_dismissed so the host's toolbar toggle
+// flips off in lockstep; the host echoes __deactivate_edit_mode back which
+// is what actually hides the panel.
+function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children }) {
+  const [open, setOpen] = React.useState(false);
+  const dragRef = React.useRef(null);
+  // Auto-inject a rail toggle when a <deck-stage> is on the page. The
+  // toggle drives the deck's per-viewer _railVisible via window message;
+  // state is mirrored from the same localStorage key the deck reads so
+  // the control reflects reality across reloads. The mechanism is the
+  // message — authors who want custom placement can post it directly
+  // and pass noDeckControls to suppress this one.
+  const hasDeckStage = React.useMemo(
+    () => typeof document !== 'undefined' && !!document.querySelector('deck-stage'),
+    [],
+  );
+  // deck-stage enables its rail in connectedCallback, but this panel can
+  // mount before that element has upgraded. The initial read catches the
+  // common case; the listener covers mounting first. (Older deck-stage.js
+  // copies still wait for the host's __omelette_rail_enabled postMessage —
+  // same listener handles those.)
+  const [railEnabled, setRailEnabled] = React.useState(
+    () => hasDeckStage && !!document.querySelector('deck-stage')?._railEnabled,
+  );
+  React.useEffect(() => {
+    if (!hasDeckStage || railEnabled) return undefined;
+    const onMsg = (e) => {
+      if (e.data && e.data.type === '__omelette_rail_enabled') setRailEnabled(true);
+    };
+    window.addEventListener('message', onMsg);
+    return () => window.removeEventListener('message', onMsg);
+  }, [hasDeckStage, railEnabled]);
+  const [railVisible, setRailVisible] = React.useState(() => {
+    try { return localStorage.getItem('deck-stage.railVisible') !== '0'; } catch (e) { return true; }
+  });
+  const toggleRail = (on) => {
+    setRailVisible(on);
+    window.postMessage({ type: '__deck_rail_visible', on }, '*');
+  };
+  const offsetRef = React.useRef({ x: 16, y: 16 });
+  const PAD = 16;
+
+  const clampToViewport = React.useCallback(() => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const w = panel.offsetWidth, h = panel.offsetHeight;
+    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
+    offsetRef.current = {
+      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
+      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
+    };
+    panel.style.right = offsetRef.current.x + 'px';
+    panel.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+
+  React.useEffect(() => {
+    if (!open) return;
+    clampToViewport();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', clampToViewport);
+      return () => window.removeEventListener('resize', clampToViewport);
+    }
+    const ro = new ResizeObserver(clampToViewport);
+    ro.observe(document.documentElement);
+    return () => ro.disconnect();
+  }, [open, clampToViewport]);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode') setOpen(true);
+      else if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const dismiss = () => {
+    setOpen(false);
+    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+  };
+
+  const onDragStart = (e) => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY;
+    const startRight = window.innerWidth - r.right;
+    const startBottom = window.innerHeight - r.bottom;
+    const move = (ev) => {
+      offsetRef.current = {
+        x: startRight - (ev.clientX - sx),
+        y: startBottom - (ev.clientY - sy),
+      };
+      clampToViewport();
+    };
+    const up = () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  };
+
+  if (!open) return null;
+  return (
+    <>
+      <style>{__TWEAKS_STYLE}</style>
+      <div ref={dragRef} className="twk-panel" data-noncommentable=""
+           style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+        <div className="twk-hd" onMouseDown={onDragStart}>
+          <b>{title}</b>
+          <button className="twk-x" aria-label="Close tweaks"
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onClick={dismiss}>✕</button>
+        </div>
+        <div className="twk-body">
+          {children}
+          {hasDeckStage && railEnabled && !noDeckControls && (
+            <TweakSection label="Deck">
+              <TweakToggle label="Thumbnail rail" value={railVisible} onChange={toggleRail} />
+            </TweakSection>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ── Layout helpers ──────────────────────────────────────────────────────────
+
+function TweakSection({ label, children }) {
+  return (
+    <>
+      <div className="twk-sect">{label}</div>
+      {children}
+    </>
+  );
+}
+
+function TweakRow({ label, value, children, inline = false }) {
+  return (
+    <div className={inline ? 'twk-row twk-row-h' : 'twk-row'}>
+      <div className="twk-lbl">
+        <span>{label}</span>
+        {value != null && <span className="twk-val">{value}</span>}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+// ── Controls ────────────────────────────────────────────────────────────────
+
+function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
+  return (
+    <TweakRow label={label} value={`${value}${unit}`}>
+      <input type="range" className="twk-slider" min={min} max={max} step={step}
+             value={value} onChange={(e) => onChange(Number(e.target.value))} />
+    </TweakRow>
+  );
+}
+
+function TweakToggle({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <button type="button" className="twk-toggle" data-on={value ? '1' : '0'}
+              role="switch" aria-checked={!!value}
+              onClick={() => onChange(!value)}><i /></button>
+    </div>
+  );
+}
+
+function TweakRadio({ label, value, options, onChange }) {
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  // The active value is read by pointer-move handlers attached for the lifetime
+  // of a drag — ref it so a stale closure doesn't fire onChange for every move.
+  const valueRef = React.useRef(value);
+  valueRef.current = value;
+
+  // Segments wrap mid-word once per-segment width runs out. The track is
+  // ~248px (280 panel − 28 body pad − 4 seg pad), each button loses 12px
+  // to its own padding, and 11.5px system-ui averages ~6.3px/char — so 2
+  // options fit ~16 chars each, 3 fit ~10. Past that (or >3 options), fall
+  // back to a dropdown rather than wrap.
+  const labelLen = (o) => String(typeof o === 'object' ? o.label : o).length;
+  const maxLen = options.reduce((m, o) => Math.max(m, labelLen(o)), 0);
+  const fitsAsSegments = maxLen <= ({ 2: 16, 3: 10 }[options.length] ?? 0);
+  if (!fitsAsSegments) {
+    // <select> emits strings — map back to the original option value so the
+    // fallback stays type-preserving (numbers, booleans) like the segment path.
+    const resolve = (s) => {
+      const m = options.find((o) => String(typeof o === 'object' ? o.value : o) === s);
+      return m === undefined ? s : typeof m === 'object' ? m.value : m;
+    };
+    return <TweakSelect label={label} value={value} options={options}
+                        onChange={(s) => onChange(resolve(s))} />;
+  }
+  const opts = options.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
+  const idx = Math.max(0, opts.findIndex((o) => o.value === value));
+  const n = opts.length;
+
+  const segAt = (clientX) => {
+    const r = trackRef.current.getBoundingClientRect();
+    const inner = r.width - 4;
+    const i = Math.floor(((clientX - r.left - 2) / inner) * n);
+    return opts[Math.max(0, Math.min(n - 1, i))].value;
+  };
+
+  const onPointerDown = (e) => {
+    setDragging(true);
+    const v0 = segAt(e.clientX);
+    if (v0 !== valueRef.current) onChange(v0);
+    const move = (ev) => {
+      if (!trackRef.current) return;
+      const v = segAt(ev.clientX);
+      if (v !== valueRef.current) onChange(v);
+    };
+    const up = () => {
+      setDragging(false);
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+
+  return (
+    <TweakRow label={label}>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
+           className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+        <div className="twk-seg-thumb"
+             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
+                      width: `calc((100% - 4px) / ${n})` }} />
+        {opts.map((o) => (
+          <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakSelect({ label, value, options, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <select className="twk-field" value={value} onChange={(e) => onChange(e.target.value)}>
+        {options.map((o) => {
+          const v = typeof o === 'object' ? o.value : o;
+          const l = typeof o === 'object' ? o.label : o;
+          return <option key={v} value={v}>{l}</option>;
+        })}
+      </select>
+    </TweakRow>
+  );
+}
+
+function TweakText({ label, value, placeholder, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <input className="twk-field" type="text" value={value} placeholder={placeholder}
+             onChange={(e) => onChange(e.target.value)} />
+    </TweakRow>
+  );
+}
+
+function TweakNumber({ label, value, min, max, step = 1, unit = '', onChange }) {
+  const clamp = (n) => {
+    if (min != null && n < min) return min;
+    if (max != null && n > max) return max;
+    return n;
+  };
+  const startRef = React.useRef({ x: 0, val: 0 });
+  const onScrubStart = (e) => {
+    e.preventDefault();
+    startRef.current = { x: e.clientX, val: value };
+    const decimals = (String(step).split('.')[1] || '').length;
+    const move = (ev) => {
+      const dx = ev.clientX - startRef.current.x;
+      const raw = startRef.current.val + dx * step;
+      const snapped = Math.round(raw / step) * step;
+      onChange(clamp(Number(snapped.toFixed(decimals))));
+    };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+  return (
+    <div className="twk-num">
+      <span className="twk-num-lbl" onPointerDown={onScrubStart}>{label}</span>
+      <input type="number" value={value} min={min} max={max} step={step}
+             onChange={(e) => onChange(clamp(Number(e.target.value)))} />
+      {unit && <span className="twk-num-unit">{unit}</span>}
+    </div>
+  );
+}
+
+// Relative-luminance contrast pick — checkmarks drawn over a swatch need to
+// read on both #111 and #fafafa without per-option configuration. Hex input
+// only (#rgb / #rrggbb); named or rgb()/hsl() colors fall through to "light".
+function __twkIsLight(hex) {
+  const h = String(hex).replace('#', '');
+  const x = h.length === 3 ? h.replace(/./g, (c) => c + c) : h.padEnd(6, '0');
+  const n = parseInt(x.slice(0, 6), 16);
+  if (Number.isNaN(n)) return true;
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  return r * 299 + g * 587 + b * 114 > 148000;
+}
+
+const __TwkCheck = ({ light }) => (
+  <svg viewBox="0 0 14 14" aria-hidden="true">
+    <path d="M3 7.2 5.8 10 11 4.2" fill="none" strokeWidth="2.2"
+          strokeLinecap="round" strokeLinejoin="round"
+          stroke={light ? 'rgba(0,0,0,.78)' : '#fff'} />
+  </svg>
+);
+
+// TweakColor — curated color/palette picker. Each option is either a single
+// hex string or an array of 1-5 hex strings; the card adapts — a lone color
+// renders solid, a palette renders colors[0] as the hero (left ~2/3) with the
+// rest stacked in a sharp column on the right. onChange emits the
+// option in the shape it was passed (string stays string, array stays array).
+// Without options it falls back to the native color input for back-compat.
+function TweakColor({ label, value, options, onChange }) {
+  if (!options || !options.length) {
+    return (
+      <div className="twk-row twk-row-h">
+        <div className="twk-lbl"><span>{label}</span></div>
+        <input type="color" className="twk-swatch" value={value}
+               onChange={(e) => onChange(e.target.value)} />
+      </div>
+    );
+  }
+  // Native <input type=color> emits lowercase hex per the HTML spec, so
+  // compare case-insensitively. String() guards JSON.stringify(undefined),
+  // which returns the primitive undefined (no .toLowerCase).
+  const key = (o) => String(JSON.stringify(o)).toLowerCase();
+  const cur = key(value);
+  return (
+    <TweakRow label={label}>
+      <div className="twk-chips" role="radiogroup">
+        {options.map((o, i) => {
+          const colors = Array.isArray(o) ? o : [o];
+          const [hero, ...rest] = colors;
+          const sup = rest.slice(0, 4);
+          const on = key(o) === cur;
+          return (
+            <button key={i} type="button" className="twk-chip" role="radio"
+                    aria-checked={on} data-on={on ? '1' : '0'}
+                    aria-label={colors.join(', ')} title={colors.join(' · ')}
+                    style={{ background: hero }}
+                    onClick={() => onChange(o)}>
+              {sup.length > 0 && (
+                <span>
+                  {sup.map((c, j) => <i key={j} style={{ background: c }} />)}
+                </span>
+              )}
+              {on && <__TwkCheck light={__twkIsLight(hero)} />}
+            </button>
+          );
+        })}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakButton({ label, onClick, secondary = false }) {
+  return (
+    <button type="button" className={secondary ? 'twk-btn secondary' : 'twk-btn'}
+            onClick={onClick}>{label}</button>
+  );
+}
+
+Object.assign(window, {
+  useTweaks, TweaksPanel, TweakSection, TweakRow,
+  TweakSlider, TweakToggle, TweakRadio, TweakSelect,
+  TweakText, TweakNumber, TweakColor, TweakButton,
+});
+  </script>
+  <script type="text/babel">
+/* eslint-disable */
+// pages.jsx — page-level components for Pinocchio Pizzéria
+// (loaded as a Babel script; everything is attached to window at the bottom)
+
+const { useState, useMemo, useEffect } = React;
+
+const PHONE = "+36 30 755 6846";
+const ADDRESS_LINE1 = "Tóth Kálmán tér 5.";
+const ADDRESS_LINE2 = "6500 Baja";
+const EMAIL = "hello@pinocchiopizza.hu";
+
+const DAYS = [
+{ key: "H", full: "Hétfő" },
+{ key: "K", full: "Kedd" },
+{ key: "Sz", full: "Szerda" },
+{ key: "Cs", full: "Csütörtök" },
+{ key: "P", full: "Péntek" },
+{ key: "Szo", full: "Szombat" },
+{ key: "V", full: "Vasárnap" }];
+
+
+function PlaceholderImage({ label, tone = "warm" }) {
+  const cls = {
+    warm: "tile-warm",
+    dark: "tile-dark",
+    red: "tile-red",
+    cream: "tile-cream"
+  }[tone] || "tile-warm";
+  return (
+    <div className={`feat-img ${cls}`}>
+      <div className="feat-img-stripe"></div>
+      <span className="label">{label}</span>
+    </div>);
+
+}
+
+/* ─────────────────────────────────────────────────────────────
+   HOME
+───────────────────────────────────────────────────────────── */
+function HomePage({ onNav, t }) {
+  const today = new Date().getDay(); // 0=Sun
+  const todayIdx = today === 0 ? 6 : today - 1;
+
+  return (
+    <main className="page" data-screen-label="Kezdőlap">
+
+      {/* EU / Széchenyi Terv Plusz funding badge (kötelező megjelenítés) */}
+      <a
+        className="funding-badge"
+        href="#/funding"
+        onClick={(e) => {e.preventDefault();onNav("funding");}}
+        aria-label="Széchenyi Terv Plusz · Magyarország Kormánya · Az Európai Unió társfinanszírozásával — projekt részletek">
+        <img src="assets/szechenyi-terv-plusz.jpg" alt="Széchenyi Terv Plusz – Magyarország Kormánya – Az Európai Unió társfinanszírozásával" />
+      </a>
+
+      {/* HERO */}
+      <section className="hero hero-photo">
+        <img className="hero-img" src="assets/hero-pizza.png" alt="Pinocchio pizza" />
+        <div className="hero-vignette"></div>
+        <div className="hero-content">
+          <div className="hero-eyebrow"><span className="bar"></span><span>Pinocchio Pizzéria · Baja</span></div>
+          <h1 className="hero-title" style={{ fontFamily: "\"Playfair Display\"" }}>Toszkána<br />íze <em>Baján.</em></h1>
+          <p className="hero-sub" style={{ fontFamily: "\"Playfair Display\"" }}>
+            Kemencében sült pizzák, kézzel készült friss paszták.
+            Hosszú kelesztésű tészta, válogatott olasz alapanyagok,
+            és minden falatban egy darabka Itália.
+          </p>
+          <div className="hero-actions">
+            <a href="tel:+36307556846" className="btn btn-primary" style={{ opacity: "1", fontWeight: "500" }}>Rendelj most</a>
+            <button className="btn btn-ghost-light" onClick={() => onNav("contact")}>Asztalfoglalás</button>
+          </div>
+        </div>
+      </section>
+
+      {/* FEATURED */}
+      <section className="section">
+        <div className="container">
+          <header className="section-head">
+            <div>
+              <div className="eyebrow">A pulton legnépszerűbb</div>
+              <h2 className="section-title">Három kedvenc<br />a kemencéből.</h2>
+            </div>
+            <button className="btn btn-ghost" onClick={() => onNav("menu")}>Teljes étlap →</button>
+          </header>
+
+          <div className="featured-grid">
+            <article className="feat-card">
+              <div className="feat-img">
+                <img src="assets/pizza-pinocchio.png" alt="Pinocchio pizza" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+              </div>
+              <div className="feat-head">
+                <h3 className="feat-name">Pinocchio</h3>
+                <span className="feat-price">3 590 Ft</span>
+              </div>
+              <p className="feat-desc">Paradicsomszósz, mozzarella, rukkola, pármai sonka és parmezán forgács. A névadó.</p>
+            </article>
+
+            <article className="feat-card">
+              <div className="feat-img">
+                <img src="assets/pizza-bruno.png" alt="Bruno pizza" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+              </div>
+              <div className="feat-head">
+                <h3 className="feat-name">Bruno</h3>
+                <span className="feat-price">3 590 Ft</span>
+              </div>
+              <p className="feat-desc">Paradicsomszósz, négysajtos alap és olasz főtt sonka. Vendégeink visszatérő kedvence.</p>
+            </article>
+
+            <article className="feat-card">
+              <div className="feat-img">
+                <img src="assets/pizza-diavola.png" alt="Diavola Verde pizza" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+              </div>
+              <div className="feat-head">
+                <h3 className="feat-name">Diavola Verde</h3>
+                <span className="feat-price">3 590 Ft</span>
+              </div>
+              <p className="feat-desc">Paradicsomszósz, mozzarella, csípős olasz szalámi, friss rukkola, koktélparadicsom.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      {/* TWO COL PROMO */}
+      <section className="section-tight">
+        <div className="container two-col">
+          <div>
+            <div className="eyebrow">A konyháról</div>
+            <h2 className="section-title" style={{ marginTop: 12, marginBottom: 24 }}>
+              Hosszú kelesztés.<br />Friss alapanyag.<br />Semmi rejtegetnivaló.
+            </h2>
+            <p style={{ fontSize: 17, color: "var(--fg-soft)", lineHeight: 1.6, maxWidth: "52ch", marginBottom: 28 }}>
+              Tésztánkat hagyományos olasz módszerrel készítjük: 24–48 órán át pihen,
+              mire a kemencébe kerül. Sajtjaink és sonkáink Itáliából érkeznek,
+              a paradicsomszószt házilag főzzük.
+            </p>
+            <button className="btn btn-ghost" onClick={() => onNav("about")}>Rólunk →</button>
+          </div>
+          <PlaceholderImage label="// KONYHA — tészta nyújtás közben" tone="cream" />
+        </div>
+      </section>
+
+      {/* REVIEWS */}
+      {t.showReviews &&
+      <section className="section" style={{ borderTop: "1px solid var(--line)" }}>
+          <div className="container">
+            <header className="section-head">
+              <div>
+                <div className="eyebrow">Vendégeink</div>
+                <h2 className="section-title">Mit mondanak<br />rólunk.</h2>
+              </div>
+              <div className="mono" style={{ color: "var(--fg-mute)" }}>4.8 / 5 · Google</div>
+            </header>
+
+            <div className="reviews-grid">
+              {REVIEWS.map((r, i) =>
+            <article className="review" key={i}>
+                  <div className="review-stars">★★★★★</div>
+                  <p className="review-quote">„{r.quote}"</p>
+                  <div className="review-meta">
+                    <div className="review-avatar">{r.name[0]}</div>
+                    <div>
+                      <b>{r.name}</b><br />
+                      <span>{r.when}</span>
+                    </div>
+                  </div>
+                </article>
+            )}
+            </div>
+          </div>
+        </section>
+      }
+
+      {/* CONTACT TEASER */}
+      <section className="section-tight">
+        <div className="container two-col" style={{ alignItems: "start" }}>
+          <div>
+            <div className="eyebrow">Találkozunk</div>
+            <h2 className="section-title" style={{ marginTop: 12, marginBottom: 24 }}>
+              Egy lépésnyire a<br />Sugovica partjától.
+            </h2>
+            <p style={{ fontSize: 17, color: "var(--fg-soft)", lineHeight: 1.6, maxWidth: "50ch", marginBottom: 28 }}>
+              Üdvözlünk a belvárosi pizzériánkban. Asztalfoglaláshoz hívj minket,
+              vagy gyere be — szívesen ülünk veled is egy kávéra.
+            </p>
+            <div className="hero-actions">
+              <a href={`tel:${PHONE.replace(/\s/g, '')}`} className="btn btn-dark">{PHONE}</a>
+              <button className="btn btn-ghost" onClick={() => onNav("contact")}>Térkép & kapcsolat →</button>
+            </div>
+          </div>
+          <div className="feat-img" style={{ aspectRatio: "4 / 5" }}>
+            <img src="assets/terasz.jpeg" alt="Pinocchio Pizzéria terasz, Tóth Kálmán tér" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+          </div>
+        </div>
+      </section>
+
+    </main>);
+
+}
+
+const REVIEWS = [
+{ name: "Eszter K.", when: "2 hete · helyben evett", quote: "A Pinocchio pizza tényleg úgy érződik, mintha Itáliában lennénk. A tészta lágy, a feltétek frissek. Visszamegyünk." },
+{ name: "Bence T.", when: "1 hónapja · elvitel", quote: "A Tartufo e N'Duja egy bomba. Csípős, krémes, mély íz. Bajai pizzaként eddig nem ismert szintre emeli a műfajt." },
+{ name: "Anna V.", when: "3 hete · helyben evett", quote: "Kicsi, csendes hely, de az étel és a kiszolgálás kiváló. A gnocchi al formaggi mennyei volt." }];
+
+
+/* ─────────────────────────────────────────────────────────────
+   MENU
+───────────────────────────────────────────────────────────── */
+function MenuPage() {
+  const [tab, setTab] = useState("ALL");
+  const [q, setQ] = useState("");
+
+  const sections = useMemo(() => {
+    const all = window.MENU_DATA;
+    const keys = tab === "ALL" ? Object.keys(all) : [tab];
+    return keys.map((k) => {
+      const sec = all[k];
+      const items = q ?
+      sec.items.filter((it) =>
+      (it.name + " " + it.desc).toLowerCase().includes(q.toLowerCase())) :
+      sec.items;
+      return { key: k, ...sec, items };
+    }).filter((s) => s.items.length);
+  }, [tab, q]);
+
+  return (
+    <main className="page" data-screen-label="Étlap">
+      <div className="container menu-header">
+        <div className="eyebrow" style={{ marginBottom: 24 }}>Étlap · 2026</div>
+        <h1 className="menu-title">Étlap</h1>
+        <div className="menu-intro">
+          <p style={{ fontFamily: "var(--display)", fontSize: "clamp(20px, 2vw, 28px)", fontStyle: "italic", lineHeight: 1.3, color: "var(--fg-soft)" }}>
+            Frissen sült pizzák,<br />házi tésztából készült paszták.<br />
+            Olasz ízek, minőségi alapanyagok.
+          </p>
+          <div style={{ fontSize: 14.5, color: "var(--fg-mute)", lineHeight: 1.65, maxWidth: "50ch" }}>
+            Áraink Forintban (HUF) értendők és tartalmazzák az ÁFA-t. Az étlapon feltüntetett árak
+            szervízdíjat nem tartalmaznak. Az ételekben található allergénekről kollégánk
+            szívesen tájékoztat a pultnál.
+          </div>
+        </div>
+
+        <div className="menu-controls">
+          <div className="menu-search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ opacity: .5 }}>
+              <circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" />
+            </svg>
+            <input
+              type="text"
+              placeholder="Keress pizzára, alapanyagra... (pl. szarvasgomba, vega)"
+              value={q}
+              onChange={(e) => setQ(e.target.value)} />
+            
+            {q && <button onClick={() => setQ("")} style={{ background: "none", border: 0, color: "var(--fg-mute)", cursor: "pointer", fontSize: 18, padding: 0 }}>×</button>}
+          </div>
+        </div>
+
+        <div className="menu-tabs">
+          {[
+          { k: "ALL", label: "Mindegyik" },
+          { k: "PIZZA", label: "Pizza" },
+          { k: "PASTA", label: "Pasta" },
+          { k: "SALATA", label: "Saláta" },
+          { k: "EXTRA", label: "Extra feltétek" },
+          { k: "ITAL", label: "Italok" },
+          { k: "KAVE", label: "Üdítők & kávé" },
+          { k: "DESSZERT", label: "Desszertek" }].
+          map(({ k, label }) =>
+          <button key={k} className={`menu-tab ${tab === k ? "active" : ""}`} onClick={() => setTab(k)}>
+              {label}
+            </button>
+          )}
+        </div>
+      </div>
+
+      <div className="container">
+        {sections.length === 0 &&
+        <div className="menu-empty">Nem találtunk találatot „{q}"-ra. Próbálkozz másik kifejezéssel.</div>
+        }
+
+        {sections.map((sec) =>
+        <section className="menu-section" key={sec.key}>
+            <div className="menu-section-head">
+              <h2 className="menu-section-title">{sec.label}</h2>
+              <p className="menu-section-note">{sec.note}</p>
+            </div>
+
+            <div className="menu-list">
+              {sec.items.map((it) =>
+            <div className="menu-item" key={it.n + it.name}>
+                  <span className="menu-item-num">{String(it.n).padStart(2, "0")}</span>
+                  <div className="menu-item-body">
+                    <span className="menu-item-name">
+                      {it.name}{it.spicy && <span style={{ color: "var(--accent)", marginLeft: 8, fontSize: 14 }}>·</span>}{it.spicy && <span style={{ color: "var(--accent)", fontSize: 11, marginLeft: 4, fontFamily: "var(--mono)", letterSpacing: ".1em" }}>CSÍPŐS</span>}
+                    </span>
+                    <span className="menu-item-desc">{it.desc}</span>
+                  </div>
+                  <span className="menu-item-price">{it.price}</span>
+                </div>
+            )}
+            </div>
+          </section>
+        )}
+
+        <div className="menu-foot">
+          Áraink Forintban (HUF) értendők és tartalmazzák az ÁFA-t. Csomagolás 200 Ft, extra pizzaszósz 300 Ft,
+          extra csípős pizzaszósz 300 Ft. Igény szerint cserélhető pasta-tészta: tagliatelle, spagetti, gnocchi, penne.
+        </div>
+      </div>
+    </main>);
+
+}
+
+/* ─────────────────────────────────────────────────────────────
+   GALLERY
+───────────────────────────────────────────────────────────── */
+function GalleryPage() {
+  const tiles = [
+  { size: "s-3x2", tone: "warm", label: "// 01", cap: "Margherita, frissen sütve" },
+  { size: "s-2x2", tone: "red", label: "// 02", cap: "Diavola Verde" },
+  { size: "s-1x2", tone: "cream", label: "// 03", cap: "Tészta, kelesztés alatt" },
+  { size: "s-2x1", tone: "dark", label: "// 04", cap: "" },
+  { size: "s-2x2", tone: "warm", label: "// 05", cap: "Carbonara, közeli" },
+  { size: "s-2x1", tone: "cream", label: "// 06", cap: "Az enteriőr" },
+  { size: "s-4x2", tone: "dark", label: "// 07", cap: "Kemence, üzem közben" },
+  { size: "s-2x2", tone: "red", label: "// 08", cap: "Birra Moretti csapolt" },
+  { size: "s-3x2", tone: "warm", label: "// 09", cap: "Bruno, dobozban" },
+  { size: "s-3x1", tone: "cream", label: "// 10", cap: "Asztalterítés" }];
+
+  return (
+    <main className="page" data-screen-label="Galéria">
+      <div className="container menu-header">
+        <div className="eyebrow" style={{ marginBottom: 24 }}>Galéria</div>
+        <h1 className="menu-title">Pillanatok<br /><span style={{ fontStyle: "italic" }}>a konyhából.</span></h1>
+        <p style={{ fontSize: 17, color: "var(--fg-soft)", maxWidth: "56ch", marginTop: 24, fontFamily: "var(--display)", fontStyle: "italic" }}>
+          A tészta, a kemence, a tányér. Néhány kép arról, amit a vendégeink minden este látnak.
+        </p>
+      </div>
+
+      <div className="container" style={{ paddingBottom: 96 }}>
+        <div className="gallery-grid">
+          {tiles.map((tl, i) =>
+          <div key={i} className={`tile ${tl.size} tile-${tl.tone}`}>
+              <div className="tile-stripe"></div>
+              <span className="label">{tl.label}</span>
+              {tl.cap && <span className="caption">{tl.cap}</span>}
+            </div>
+          )}
+        </div>
+
+        <div style={{ marginTop: 32, fontSize: 13, color: "var(--fg-mute)", fontFamily: "var(--mono)", letterSpacing: ".06em" }}>
+          // Helyőrző képek — a végleges galériát saját fotókkal töltöd fel
+        </div>
+      </div>
+    </main>);
+
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ABOUT
+───────────────────────────────────────────────────────────── */
+function AboutPage({ onNav }) {
+  return (
+    <main className="page" data-screen-label="Rólunk">
+      <div className="container about-hero">
+        <h1>Rólunk.</h1>
+        <p>Vannak helyek, amelyek csupán éttermek. És vannak helyek, amelyek történetekből születnek.</p>
+      </div>
+
+      <div className="container about-grid">
+        <div className="about-img">
+          <img src="assets/about-rolunk.jpeg" alt="Pinocchio asztal pizzákkal" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+        </div>
+
+        <div className="about-stack">
+          <h3>A Pinocchio egy ilyen hely.</h3>
+          <p>
+            Egy család vagyunk, akiket az olasz konyha iránti szenvedély kötött össze
+            még jóval azelőtt, hogy közösen álmodtunk volna éttermet. Az évek során
+            megtanultuk: az igazi kézműves olasz konyha titka nem csupán a recept — hanem
+            a figyelem, a türelem és az a megmagyarázhatatlan többlet, amelyet csak akkor
+            ad az ember, ha igazán szívügyének tekinti a munkáját.
+          </p>
+          <h3>Nálunk minden pizza és minden tészta kézzel készül.</h3>
+          <p>
+            Gondosan, szívvel és lélekkel — nem kompromisszumokból, hanem
+            meggyőződésből. Hiszünk abban, hogy egy jól elkészített étel több mint
+            táplálék: pillanat, amelyre vissza lehet emlékezni. Ezért törekszünk arra,
+            hogy minden egyes tányér, amelyet az asztalra teszünk, ezt az érzést
+            hordozza magában.
+          </p>
+          <p style={{ fontFamily: "var(--display)", fontStyle: "italic", fontSize: 22, color: "var(--fg)", marginTop: 12 }}>
+            Köszönjük, hogy betértél hozzánk.<br />Reméljük, nemcsak egyszer.
+          </p>
+        </div>
+      </div>
+
+      <div className="container">
+        <div className="pillars">
+          <div className="pillar">
+            <div className="num">24</div>
+            <h4>órás kelesztés</h4>
+            <p>Tésztánk hosszan pihen, hogy könnyű, emészthető és ízekben gazdag legyen.</p>
+          </div>
+          <div className="pillar">
+            <div className="num">100%</div>
+            <h4>olasz alapanyag</h4>
+            <p>Sajtjaink, sonkáink és lisztünk közvetlenül Itáliából érkeznek.</p>
+          </div>
+          <div className="pillar">
+            <div className="num">2013</div>
+            <h4>óta Baján</h4>
+            <p>Több mint egy évtizede sütjük a városnak — és minden évben tanulunk újat.</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="container" style={{ padding: "clamp(40px, 6vw, 80px) 0" }}>
+        <div style={{ borderTop: "1px solid var(--line)", paddingTop: 48, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 24, flexWrap: "wrap" }}>
+          <h3 style={{ fontFamily: "var(--display)", fontSize: "clamp(28px, 3vw, 40px)", lineHeight: 1.1, maxWidth: "18ch" }}>
+            Ahol minden falat <em style={{ color: "var(--accent)" }}>Toszkánát</em> idézi.
+          </h3>
+          <div className="hero-actions">
+            <button className="btn btn-primary" onClick={() => onNav("menu")}>Étlap</button>
+            <button className="btn btn-ghost" onClick={() => onNav("contact")}>Foglalj asztalt →</button>
+          </div>
+        </div>
+      </div>
+    </main>);
+
+}
+
+/* ─────────────────────────────────────────────────────────────
+   CONTACT
+───────────────────────────────────────────────────────────── */
+function ContactPage() {
+  const [form, setForm] = useState({ first: "", last: "", email: "", phone: "", guests: "2", date: "", message: "" });
+  const [sent, setSent] = useState(false);
+
+  const submit = (e) => {
+    e.preventDefault();
+    if (!form.email || !form.first) return;
+    setSent(true);
+    setTimeout(() => setSent(false), 5000);
+    setForm({ first: "", last: "", email: "", phone: "", guests: "2", date: "", message: "" });
+  };
+
+  const upd = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  return (
+    <main className="page" data-screen-label="Kapcsolat">
+      <div className="container contact-grid">
+        <div className="contact-info">
+          <div>
+            <div className="eyebrow" style={{ marginBottom: 24 }}>Kapcsolat</div>
+            <h1 style={{ fontFamily: "var(--display)", fontSize: "clamp(64px, 8vw, 140px)", lineHeight: .9, letterSpacing: "-.02em" }}>
+              Foglalj<br />asztalt.
+            </h1>
+            <p style={{ marginTop: 24, fontSize: 17, color: "var(--fg-soft)", maxWidth: "40ch", lineHeight: 1.55 }}>
+              Telefonon vagy az űrlapon keresztül — szívesen tartunk neked helyet.
+            </p>
+          </div>
+
+          <div className="contact-block">
+            <div className="eyebrow">Cím</div>
+            <div className="val">{ADDRESS_LINE1}<br />{ADDRESS_LINE2}</div>
+          </div>
+
+          <div className="contact-block">
+            <div className="eyebrow">Telefon</div>
+            <div className="val"><a href={`tel:${PHONE.replace(/\s/g, '')}`}>{PHONE}</a></div>
+          </div>
+
+          <div className="contact-block">
+            <div className="eyebrow">Email</div>
+            <div className="val" style={{ fontSize: 22 }}><a href={`mailto:${EMAIL}`}>{EMAIL}</a></div>
+          </div>
+
+          <div className="contact-block">
+            <div className="eyebrow">Nyitvatartás</div>
+            <div className="val" style={{ fontSize: 18 }}>Minden nap · 11:00 — 22:00</div>
+          </div>
+        </div>
+
+        <form className="form" onSubmit={submit}>
+          <div className="eyebrow">Asztalfoglalás / üzenet</div>
+          <h2 style={{ fontFamily: "var(--display)", fontSize: 36, lineHeight: 1.1, marginBottom: 8 }}>
+            Írj nekünk pár sort.
+          </h2>
+
+          <div className="form-row">
+            <div className="field">
+              <label>Vezetéknév</label>
+              <input type="text" value={form.last} onChange={upd("last")} />
+            </div>
+            <div className="field">
+              <label>Keresztnév *</label>
+              <input type="text" required value={form.first} onChange={upd("first")} />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="field">
+              <label>Email *</label>
+              <input type="email" required value={form.email} onChange={upd("email")} />
+            </div>
+            <div className="field">
+              <label>Telefon</label>
+              <input type="tel" value={form.phone} onChange={upd("phone")} />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="field">
+              <label>Időpont</label>
+              <input type="datetime-local" value={form.date} onChange={upd("date")} />
+            </div>
+            <div className="field">
+              <label>Fő</label>
+              <select value={form.guests} onChange={upd("guests")}>
+                {[2, 3, 4, 5, 6, 7, 8, "8+"].map((n) => <option key={n} value={n}>{n} fő</option>)}
+              </select>
+            </div>
+          </div>
+
+          <div className="field">
+            <label>Üzenet</label>
+            <textarea placeholder="Pl. szülinapot ünnepelünk, allergia, különleges kérés..." value={form.message} onChange={upd("message")}></textarea>
+          </div>
+
+          <div className="form-actions">
+            <span className="form-note">A * jelölt mezők kitöltése kötelező.</span>
+            <button type="submit" className="btn btn-dark">
+              {sent ? "✓ Köszönjük!" : "Foglalás elküldése"}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div className="container" style={{ paddingBottom: 64 }}>
+        <div className="eyebrow" style={{ marginBottom: 12 }}>Megtalálsz</div>
+        <div className="map">
+          <div className="map-grid"></div>
+          <div className="map-river"></div>
+          {/* schematic streets */}
+          <div style={{ position: "absolute", left: "30%", top: 0, bottom: 0, width: 1, background: "var(--line)" }}></div>
+          <div style={{ position: "absolute", left: 0, right: 0, top: "65%", height: 1, background: "var(--line)" }}></div>
+          <div className="map-pin">
+            <div className="pin"></div>
+            <div className="lbl">Pinocchio · {ADDRESS_LINE1}</div>
+          </div>
+          <div style={{ position: "absolute", left: 18, top: 18, fontFamily: "var(--mono)", fontSize: 10, letterSpacing: ".16em", color: "var(--fg-mute)" }}>// BAJA · TÓTH KÁLMÁN TÉR</div>
+          <div style={{ position: "absolute", right: 18, bottom: 18, fontFamily: "var(--mono)", fontSize: 10, letterSpacing: ".16em", color: "var(--fg-mute)" }}>// SUGOVICA →</div>
+        </div>
+      </div>
+    </main>);
+
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FUNDING (Széchenyi Terv Plusz) — not linked in nav
+───────────────────────────────────────────────────────────── */
+function FundingPage({ onNav }) {
+  const rows = [
+  { label: "Projekt azonosító száma", value: "GINOP Plusz-1.4.3-24 azonosító jelű KKV Technológia Plusz Hitelprogram" },
+  { label: "Kedvezményezett neve", value: "TÉSZTABÁZIS KFT." },
+  { label: "Szerződött támogatás összege", value: "7.320.000,- Ft" },
+  { label: "Fejlesztés tárgya, célja", value:
+    <>
+        <p style={{ marginBottom: 14 }}>Konyhai gépek, berendezések beszerzése.</p>
+        <p>
+          A projekt célja a bajai Pinocchio Pizzeria megnyitása és egy modern, minőségi vendéglátóhely
+          kialakítása volt, amely hozzájárul a helyi gasztronómiai kínálat bővítéséhez és új munkahelyek
+          teremtéséhez. Az elnyert visszatérítendő támogatás segítségével lehetőségünk nyílt a működéshez
+          szükséges konyhai gépek, eszközök és berendezések beszerzésére, amelyek biztosítják a hatékony
+          munkavégzést és a magas színvonalú kiszolgálást. A támogatás nagyban hozzájárult ahhoz, hogy a
+          Pinocchio Pizzeria megnyithassa kapuit vendégei előtt, és hosszú távon stabil, minőségi
+          szolgáltatást nyújthasson Baja városában.
+        </p>
+      </>
+  },
+  { label: "Projekt befejezési dátuma", value: "2030.01.01" }];
+
+
+  return (
+    <main className="page" data-screen-label="Széchenyi Terv Plusz">
+      <div className="container" style={{ paddingTop: "clamp(72px, 8vw, 120px)", paddingBottom: "clamp(48px, 6vw, 96px)" }}>
+
+        <div className="eyebrow" style={{ marginBottom: 24 }}>EU támogatás · Kötelező tájékoztatás</div>
+        <h1 style={{
+          fontFamily: "var(--display)",
+
+          lineHeight: 1.0,
+          letterSpacing: "-.02em",
+          maxWidth: "none",
+          marginBottom: 40, fontSize: "clamp(40px, 5.2vw, 76px)", fontWeight: "500",
+          whiteSpace: "nowrap"
+        }}>
+          Széchenyi Terv Plusz — EU Támogatás.
+        </h1>
+
+        <div style={{
+          background: "#ffffff",
+          border: "1px solid var(--line)",
+          padding: "clamp(24px, 3vw, 40px)",
+          maxWidth: 880,
+          marginBottom: 48
+        }}>
+          <img
+            src="assets/szechenyi-terv-plusz.jpg"
+            alt="Széchenyi Terv Plusz – Magyarország Kormánya – Az Európai Unió társfinanszírozásával"
+            style={{ width: "100%", height: "auto", display: "block" }} />
+          
+        </div>
+
+        <div style={{ maxWidth: 760, display: "flex", flexDirection: "column", gap: 32 }}>
+          {rows.map((row, i) =>
+          <div key={i} style={{ borderLeft: "2px solid var(--fg)", paddingLeft: 20 }}>
+              <h3 style={{
+              fontFamily: "var(--display)",
+              fontSize: 22,
+              lineHeight: 1.2,
+              marginBottom: 8,
+              color: "var(--fg)"
+            }}>
+                {row.label}
+              </h3>
+              <div style={{
+              fontSize: 16,
+              lineHeight: 1.65,
+              color: "var(--fg-soft)"
+            }}>
+                {row.value}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div style={{ marginTop: 64, borderTop: "1px solid var(--line)", paddingTop: 28, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+          <span className="mono" style={{ color: "var(--fg-mute)" }}>// PINOCCHIO PIZZÉRIA · TÉSZTABÁZIS KFT.</span>
+          <button className="btn btn-ghost" onClick={() => onNav("home")}>← Vissza a kezdőlapra</button>
+        </div>
+
+      </div>
+    </main>);
+
+}
+
+Object.assign(window, { HomePage, MenuPage, GalleryPage, AboutPage, ContactPage, FundingPage });  </script>
+  <script type="text/babel">
+/* eslint-disable */
+// app.jsx — Pinocchio app shell + routing + nav + footer + tweaks panel
+
+const { useState, useEffect } = React;
+
+function NavBar({ route, onNav }) {
+  const links = [
+  { k: "home", label: "Kezdőlap" },
+  { k: "menu", label: "Étlap" },
+  { k: "gallery", label: "Galéria" },
+  { k: "about", label: "Rólunk" },
+  { k: "contact", label: "Kapcsolat" }];
+
+  return (
+    <nav className="nav">
+      <div className="container nav-row">
+        <button className="nav-brand" onClick={() => onNav("home")} style={{ background: "none", border: 0, padding: 0, cursor: "pointer", color: "inherit" }}>
+          <span className="flag"><span></span><span></span><span></span></span>
+          <span>Pinocchio</span>
+        </button>
+        <div className="nav-links">
+          {links.map((l) =>
+          <button
+            key={l.k}
+            className={`nav-link ${route === l.k ? "active" : ""}`}
+            onClick={() => onNav(l.k)}>
+              {l.label}
+            </button>
+          )}
+        </div>
+        <a href={`tel:+36307556846`} className="nav-phone">
+          <span className="dot"></span>
+          +36 30 755 6846
+        </a>
+      </div>
+    </nav>);
+
+}
+
+function Footer({ onNav }) {
+  return (
+    <footer className="footer">
+      <div className="container">
+        <div className="footer-grid">
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <span className="nav-brand" style={{ fontSize: 28 }}>
+                <span className="flag"><span></span><span></span><span></span></span>
+                <span>Pinocchio</span>
+              </span>
+            </div>
+            <p className="footer-tagline">Toszkána íze, Baján.</p>
+            <p style={{ marginTop: 24, color: "var(--fg-mute)", fontSize: 13.5, maxWidth: "40ch", lineHeight: 1.6 }}>
+              Családi pizzéria a belváros szívében. Kemencében sült pizzák,
+              kézzel készült paszták, válogatott olasz alapanyagok.
+            </p>
+          </div>
+
+          <div>
+            <h5>Oldalak</h5>
+            <ul>
+              <li><a href="#" onClick={(e) => {e.preventDefault();onNav("home");}}>Kezdőlap</a></li>
+              <li><a href="#" onClick={(e) => {e.preventDefault();onNav("menu");}}>Étlap</a></li>
+              <li><a href="#" onClick={(e) => {e.preventDefault();onNav("gallery");}}>Galéria</a></li>
+              <li><a href="#" onClick={(e) => {e.preventDefault();onNav("about");}}>Rólunk</a></li>
+              <li><a href="#" onClick={(e) => {e.preventDefault();onNav("contact");}}>Kapcsolat</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h5>Kapcsolat</h5>
+            <ul>
+              <li><a href="tel:+36307556846">+36 30 755 6846</a></li>
+              <li><a href="mailto:hello@pinocchiopizza.hu">tesztabaziskft@gmail.com </a></li>
+              <li style={{ color: "var(--fg-mute)" }}>Tóth Kálmán tér 5.</li>
+              <li style={{ color: "var(--fg-mute)" }}>6500 Baja</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5>Nyitvatartás</h5>
+            <ul>
+              <li>Minden nap</li>
+              <li style={{ fontFamily: "var(--display)", fontSize: 24 }}>11:00 — 22:00</li>
+            </ul>
+
+            <h5 style={{ marginTop: 28 }}>Kövess</h5>
+            <ul>
+              <li><a href="#">Instagram</a></li>
+              <li><a href="#">Facebook</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="footer-bottom">
+          <span>© 2026 PINOCCHIO PIZZÉRIA · BAJA</span>
+          <span>MINDEN JOG FENNTARTVA</span>
+        </div>
+      </div>
+    </footer>);
+
+}
+
+/* ─── Tweaks defaults ─────────────────────────────────────── */
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "mode": "minimal",
+  "accent": "#c8362a",
+  "showReviews": true,
+  "scale": 100
+} /*EDITMODE-END*/;
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [route, setRoute] = useState(() => {
+    const h = (location.hash || "").replace("#/", "").replace("#", "");
+    const valid = ["home", "menu", "gallery", "about", "contact", "funding"];
+    return valid.includes(h) ? h : "home";
+  });
+
+  // Apply mode + accent to <html>
+  useEffect(() => {
+    document.documentElement.dataset.mode = t.mode || "minimal";
+    document.documentElement.style.setProperty("--accent", t.accent || "#c8362a");
+  }, [t.mode, t.accent]);
+
+  // Apply scale via root font size
+  useEffect(() => {
+    document.documentElement.style.fontSize = (t.scale || 100) / 100 * 16 + "px";
+  }, [t.scale]);
+
+  const onNav = (r) => {
+    setRoute(r);
+    location.hash = "/" + r;
+    window.scrollTo({ top: 0, behavior: "instant" });
+  };
+
+  useEffect(() => {
+    const onHash = () => {
+      const h = (location.hash || "").replace("#/", "").replace("#", "");
+      const valid = ["home", "menu", "gallery", "about", "contact", "funding"];
+      if (valid.includes(h)) setRoute(h);
+    };
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+  const PageComp = {
+    home: HomePage,
+    menu: MenuPage,
+    gallery: GalleryPage,
+    about: AboutPage,
+    contact: ContactPage,
+    funding: FundingPage
+  }[route];
+
+  return (
+    <div className="app">
+      <NavBar route={route} onNav={onNav} />
+      <PageComp onNav={onNav} t={t} />
+      <Footer onNav={onNav} />
+
+      <TweaksPanel>
+        <TweakSection label="Hangulat" />
+        <TweakRadio
+          label="Stílus"
+          value={t.mode}
+          options={[
+          { value: "minimal", label: "Minimál" },
+          { value: "editorial", label: "Editorial" },
+          { value: "bold", label: "Bold" }]
+          }
+          onChange={(v) => setTweak("mode", v)} />
+        
+        <TweakColor
+          label="Akcentus"
+          value={t.accent}
+          options={["#c8362a", "#1f6a3a", "#a37a2b", "#3c3c3c", "#7a2a1f"]}
+          onChange={(v) => setTweak("accent", v)} />
+        
+
+        <TweakSection label="Tartalom" />
+        <TweakToggle
+          label="Vélemények szekció"
+          value={t.showReviews}
+          onChange={(v) => setTweak("showReviews", v)} />
+        
+
+        <TweakSection label="Tipográfia" />
+        <TweakSlider
+          label="Méret"
+          value={t.scale}
+          min={85} max={120} step={5} unit="%"
+          onChange={(v) => setTweak("scale", v)} />
+        
+
+        <TweakSection label="Navigáció" />
+        <TweakSelect
+          label="Oldal"
+          value={route}
+          options={[
+          { value: "home", label: "Kezdőlap" },
+          { value: "menu", label: "Étlap" },
+          { value: "gallery", label: "Galéria" },
+          { value: "about", label: "Rólunk" },
+          { value: "contact", label: "Kapcsolat" },
+          { value: "funding", label: "Széchenyi Terv (rejtett)" }]
+          }
+          onChange={(v) => onNav(v)} />
+        
+      </TweaksPanel>
+    </div>);
+
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);  </script>
+</body>
+</html>
